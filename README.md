@@ -1,2 +1,2 @@
 # MooServer
-Authentication, Object serving, and OSC proxy for SCMoo clients
+Authentication, Object serving, and OSC proxy for SCMoo clients.
