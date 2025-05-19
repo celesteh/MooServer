@@ -57,15 +57,15 @@ app.get("/auth", (req, res) => {
 
   return res.render(path.join(template_path, 'login_error.ejs'), {
     message: 'Try again',
-    problem: true // true shows the message, false hides. The html needs work
+    problem: false // true shows the message, false hides. The html needs work
   })
 
 });
 
 app.post("/auth", (req, res) => {
 
-  //const { name, password } = req.body;
-/*
+  const { name, password } = req.body;
+
   // is there anyone already in the DB?
   pool.query('SELECT name FROM users WHERE name = ?', [name], async (error, res) => {
          // remaining code goes here
@@ -96,9 +96,9 @@ app.post("/auth", (req, res) => {
         response.redirect('/chat');
         }
   })
-  */
-  //response.redirect('/chat');
-  res.sendFile(html_path + "/chat.html");
+
+  response.redirect('/chat');
+  //res.sendFile(html_path + "/chat.html");
 });
 
 
@@ -112,6 +112,11 @@ io.on("connection", (socket) => {
   socket.on("chat message", (msg) => {
     io.emit("chat message", msg); // for no echo back io.broadcast.emit
     console.log("message: " + msg);
+  });
+  socket.on("OSC", (msg) => {
+    //io.broadcast("OSC", msg); // for no echo back io.broadcast.emit
+    io.emit("OSC", msg)
+    console.log("OSC: " + msg);
   });
   socket.on("disconnect", () => {
     console.log("user disconnected");
