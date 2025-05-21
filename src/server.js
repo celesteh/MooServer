@@ -39,6 +39,7 @@ var pool = new pg.Pool(connectionString);
 
 //console.error("WTF");
 const html_path = path.join(__dirname, "../public_html/");
+const data_path = path.join(__dirname, "../data/");
 const template_path = path.join(__dirname, "../templates/");
 
 const port = 8447; // assigned by my hosting
@@ -99,12 +100,18 @@ app.post("/auth", (req, res) => {
 
   response.redirect('/chat');
   //res.sendFile(html_path + "/chat.html");
+
 });
 
 
 
 app.get("/chat", (req, res) => {
   res.sendFile(html_path + "/chat.html");
+});
+
+app.get("/json", (req, res) => {
+  //res.sendFile(html_path + "/chat.html");
+  res.sendFile(data_path + "/Moo.JSON");
 });
 
 io.on("connection", (socket) => {
