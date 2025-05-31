@@ -1,20 +1,20 @@
 //import { createRequire } from "module"; <-- This is something called ES. Don't use it
 
 const express = require("express");
+const { createServer } = require('node:http');
+const { join } = require('node:path');
+
 const app = express();
-const http = require("http");
-const server = http.createServer(app);
-const path = require("path");
-//const __dirname = path.resolve();
+const server = createServer(app);
+
 const dotenv = require('dotenv');
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-const bcrypt = require("bcryptjs");
+//const bcrypt = require("bcryptjs"); // this package may be dodgy
 
 app.use(express.urlencoded({extended: 'false'}));
 app.use(express.json());
-
 
 // here's the DB specific part:
 var pg = require("pg");
@@ -38,9 +38,9 @@ var pool = new pg.Pool(connectionString);
 //});
 
 //console.error("WTF");
-const html_path = path.join(__dirname, "../public_html/");
-const data_path = path.join(__dirname, "../data/");
-const template_path = path.join(__dirname, "../templates/");
+const html_path = join(__dirname, "../public_html/");
+const data_path = join(__dirname, "../data/");
+const template_path = join(__dirname, "../templates/");
 
 const port = 8447; // assigned by my hosting
 //var port = argv["p"];
@@ -56,7 +56,7 @@ app.use(express.static(html_path)); // serve all the files
 
 app.get("/auth", (req, res) => {
 
-  return res.render(path.join(template_path, 'login_error.ejs'), {
+  return res.render(join(template_path, 'login_error.ejs'), {
     message: 'Try again',
     problem: false // true shows the message, false hides. The html needs work
   })
@@ -87,7 +87,7 @@ app.post("/auth", (req, res) => {
             response.redirect('/chat');
           } else {
             // the password and username don't match
-            return res.render(path.join(templatepath, 'login_error.ejs'), {
+            return res.render(join(templatepath, 'login_error.ejs'), {
               message: 'Incorrect password or user name already in use'
             })
           };
